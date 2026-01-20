@@ -1,0 +1,23 @@
+/* Improve mobile tap targets */
+@media (max-width: 640px) {
+    button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Better scrolling on mobile */
+@media (max-width: 768px) {
+    main {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}

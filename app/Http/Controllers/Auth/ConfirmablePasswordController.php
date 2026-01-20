@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Helpers\RoleBasedRedirectHelper;
+use Illuminate\Validation\ValidationException;
 
 class ConfirmablePasswordController extends Controller
 {
@@ -35,6 +36,11 @@ class ConfirmablePasswordController extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended(route('dashboard', absolute: false));
+          $user = Auth::user();
+
+        $redirectUrl = RoleBasedRedirectHelper::getDashboardRoute($user);
+        return redirect()->intended(($redirectUrl));
+
+       // return redirect()->intended(route('dashboard', absolute: false));
     }
 }
