@@ -1,42 +1,37 @@
-<div
-    x-data="{
-        active: {{ $active }},        // 0-based active index
-        disabled: @js($disabled)      // disabled tabs are 1-based: [2, 3]
-    }"
-    class="w-full"
->
-    <!-- Tabs Header -->
-    <div class="text-sm font-medium border-b border-default">
-        <ul class="flex flex-wrap -mb-px">
-            @foreach ($tabs as $index => $tabTitle)
-                @php
-                    // Disabled is stored 1-based, so index+1
-                    $isDisabled = in_array($index + 1, $disabled);
-                @endphp
+@props(['tabs', 'default' => null])
 
-                <li class="me-2">
-                    <button
-                        type="button"
-                        role="tab"
-                        :aria-selected="active === {{ $index }}"
-                        @click="if (!{{ $isDisabled ? 'true' : 'false' }}) active = {{ $index }}"
-                        class="inline-block p-4 transition border-b-2 rounded-t-base"
-                        :class="{
-                            'border-blue-600 text-blue-600': active === {{ $index }},
-                            'border-transparent hover:text-blue-600 hover:border-blue-600': active !== {{ $index }},
-                            'text-gray-400 cursor-not-allowed': {{ $isDisabled ? 'true' : 'false' }}
-                        }"
-                        {{ $isDisabled ? 'disabled' : '' }}
-                    >
-                        {{ $tabTitle }}
-                    </button>
-                </li>
-            @endforeach
-        </ul>
+@php
+    $active = $default ?? $tabs[0];
+@endphp
+
+<div x-data="{ activeTab: '{{ $active }}' }" class="w-full">
+    <div class="flex mb-4 border-b border-gray-200">
+        @foreach($tabs as $tab)
+            <button
+                type="button"
+                @click="activeTab = '{{ $tab }}'"
+                :class="activeTab === '{{ $tab }}' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'"
+                class="px-4 py-2 text-sm font-medium capitalize transition-colors border-b-2"
+            >
+                {{ str_replace('_', ' ', $tab) }}
+            </button>
+        @endforeach
     </div>
 
-    <!-- Tabs Content -->
-    <div class="mt-4">
-        {{ $slot }}
+    <div>
+        @foreach($tabs as $tab)
+            <div
+                wire:key="tab-{{ $tab }}"
+                x-show="activeTab === '{{ $tab }}'"
+                x-cloak
+                x-transition
+                >
+                {{-- FIX: Access the slot via the $__env variable which handles slots more reliably --}}
+                @if(isset($__laravel_slots[$tab]))
+                    {!! $__laravel_slots[$tab] !!}
+
+                @endif
+            </div>
+        @endforeach
     </div>
 </div>

@@ -12,6 +12,12 @@
         <x-application-logo class="w-full " />
     </div>
 
+
+    @php
+    $getUserRole = Auth::user()->getRoleNames()->first();
+
+
+    @endphp
     <nav class="px-2 mt-20 space-y-2 text-sm md:mt-2">
         <div class="px-3 mb-2 text-xs font-medium text-gray-500 uppercase transition-opacity duration-200"
             :class="{
@@ -21,8 +27,8 @@
             Menu
         </div>
 
-        <a href="#" x-bind:class="{ 'justify-center': sidebarCollapsed && !sidebarHover }"
-            class="flex items-center gap-2 px-3 py-3 mt-5 font-medium text-blue-900 transition-colors bg-blue-100 rounded hover:bg-blue-50">
+        <a href="{{ route($getUserRole.".dashboard") }}" x-bind:class="{ 'justify-center': sidebarCollapsed && !sidebarHover }"
+            class="flex items-center gap-2 px-3 py-3 mt-5 font-medium  transition-colors  rounded hover:bg-blue-50 {{ request()->routeIs($getUserRole.".dashboard") ? 'bg-blue-100 text-blue-950' : 'text-black' }}">
             <!-- ICON: never touched -->
             <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
 
@@ -54,24 +60,24 @@
                 <!-- Manage Links (Collapse by default) -->
                 <div x-show="open" class="mt-1 ml-4 transition-opacity duration-200" x-transition>
                     <!-- Patient Registration Link -->
-                    <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-gray-100">
+                    <a href="{{ route($getUserRole.".register-patient") }}" class="flex items-center gap-2 mb-1 px-3 py-2 text-sm rounded hover:bg-gray-100 {{  request()->routeIs($getUserRole.".register-patient") ? 'bg-blue-100 text-blue-950' : ''  }}">
                         <i data-lucide="user-plus" class="w-4 h-4"></i> Register Patient
                     </a>
 
 
                     <!-- Queue Management Link -->
-                    <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-gray-100">
+                    <a href="#" class="flex items-center gap-2 px-3 py-2 mb-1 text-sm rounded hover:bg-gray-100">
                         <i data-lucide="list-ordered" class="w-4 h-4 "></i> Queue Management
                     </a>
 
 
                     <!-- Patient Search Link -->
-                    <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-gray-100">
+                    <a href="#" class="flex items-center gap-2 px-3 py-2 mb-1 text-sm rounded hover:bg-gray-100">
                         <i data-lucide="history" class="w-4 h-4"></i> Patient History
                     </a>
 
                     <!-- Reports Link -->
-                    <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-gray-100">
+                    <a href="#" class="flex items-center gap-2 px-3 py-2 mb-1 text-sm rounded hover:bg-gray-100">
                         <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Reports
                     </a>
                 </div>
