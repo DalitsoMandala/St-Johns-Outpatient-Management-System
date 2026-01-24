@@ -12,13 +12,7 @@ use App\Livewire\Dashboard\PharmacistDashboard;
 use App\Livewire\Dashboard\PathologistDashboard;
 use App\Livewire\Dashboard\StoresClerkDashboard;
 use App\Livewire\Dashboard\ReceptionistDashboard;
-
-
-
-
-
-
-
+use App\Livewire\Pages\QueueManagementPage;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -44,6 +38,12 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:receptionist'])->group(function () {
     $role = 'receptionist';
     Route::get("/$role/register-patient", RegisterPatientPage::class)->name("" . $role . ".register-patient");
+    Route::get("/$role/queue-management", QueueManagementPage::class)->name("" . $role . ".queue-management");
+});
 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    $role = 'admin';
+    Route::get("/$role/register-patient", RegisterPatientPage::class)->name("" . $role . ".register-patient");
+    Route::get("/$role/queue-management", QueueManagementPage::class)->name("" . $role . ".queue-management");
 });
 require __DIR__ . '/auth.php';
