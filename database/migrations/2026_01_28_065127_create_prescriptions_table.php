@@ -11,10 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prescriptions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+      Schema::create('prescriptions', function (Blueprint $table) {
+    $table->id();
+
+    $table->foreignId('encounter_id')->constrained()->cascadeOnDelete();
+    $table->foreignId('queue_ticket_id')->nullable()->constrained('queue_tickets')->nullOnDelete();
+
+    $table->foreignId('prescriber_id')->nullable()->constrained('users')->nullOnDelete();
+
+    $table->string('status', 20)->default('active'); // active|dispensed|partial|cancelled
+    $table->text('notes')->nullable();
+
+    $table->timestamps();
+
+    $table->index(['encounter_id', 'status']);
+});
+
     }
 
     /**

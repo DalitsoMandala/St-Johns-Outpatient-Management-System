@@ -11,10 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dispense_items', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('dispense_items', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('dispense_id')->constrained()->cascadeOnDelete();
+
+    $table->foreignId('prescription_item_id')->nullable()->constrained('prescription_items')->nullOnDelete();
+
+    $table->string('drug_name');
+    $table->unsignedInteger('quantity_dispensed')->default(0);
+    $table->string('batch_no')->nullable();
+    $table->date('expiry_date')->nullable();
+    $table->text('instructions')->nullable();
+
+    $table->timestamps();
+});
+
     }
 
     /**

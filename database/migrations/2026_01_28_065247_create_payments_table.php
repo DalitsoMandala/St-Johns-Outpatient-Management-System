@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('invoice_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('received_by')->nullable()->constrained('users')->nullOnDelete(); // cashier
+
+            $table->decimal('amount', 12, 2)->default(0);
+            $table->string('method', 30)->default('cash'); // cash|card|mobile_money|bank
+            $table->string('reference')->nullable();
+
+            $table->timestamp('paid_at')->useCurrent();
             $table->timestamps();
+
+            $table->index(['invoice_id']);
         });
     }
 

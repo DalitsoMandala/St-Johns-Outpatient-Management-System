@@ -11,10 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prescription_items', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('prescription_items', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('prescription_id')->constrained()->cascadeOnDelete();
+
+    $table->string('drug_name');
+    $table->string('dosage')->nullable();       // e.g. 500mg
+    $table->string('frequency')->nullable();    // e.g. 3 times/day
+    $table->string('duration')->nullable();     // e.g. 5 days
+    $table->unsignedInteger('quantity')->nullable();
+    $table->text('instructions')->nullable();
+
+    $table->timestamps();
+});
+
     }
 
     /**
